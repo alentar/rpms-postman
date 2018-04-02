@@ -1,0 +1,2139 @@
+{
+	"info": {
+		"_postman_id": "1c96e554-0db6-4b69-9e5a-4aed95190994",
+		"name": "RPMS - Server",
+		"description": "RPMS Server Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"description": "Authentication",
+			"item": [
+				{
+					"name": "localhost:3000/api/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"nic\" : \"123456789v\",\n\t\"password\": \"123456789\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/auth/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/api/auth/validate/token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "db0032d6-00e7-4d58-9535-14adcb799bca",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"refreshToken\": \"5aa2b4a99938850100f4e40b.ab6723c8cdfdfdfddfdffdfdfdf34ba851b60e2edfdfff9ef936f2fb8c575b00876464ab1d5626c99d705243a89e25b082f454cb\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/auth/validate/token",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"validate",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": null,
+			"item": [
+				{
+					"name": "localhost:3000/api/users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bb8d6d03-7c9c-40b9-86d9-8ddb193a2ecf",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Kasun Vithanage\",\n\t\"gender\": \"male\",\n\t\"title\": \"mr\",\n\t\"nic\": \"123456789v\",\n\t\"password\": \"123456789\"\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users"
+							]
+						},
+						"description": "Create user"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/api/users/{{userID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e6124ced-8f86-4cf0-98aa-fcc681e48404",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/users?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err)",
+									"        return",
+									"    }",
+									"    ",
+									"    var data = response.json()",
+									"    pm.environment.set(\"userID\", data.users[0].id)",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/{{userID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"{{userID}}"
+							]
+						},
+						"description": "get a user"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/api/users/{{userID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "31e31700-1a6c-469f-8f77-ee9edf15741c",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/users?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err)",
+									"        return",
+									"    }",
+									"    ",
+									"    var data = response.json()",
+									"    pm.environment.set(\"userID\", data.users[0].id)",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/{{userID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"{{userID}}"
+							]
+						},
+						"description": "Delete"
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/api/users/{{userID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a591e65f-cd35-4d23-998d-c4b52e0416c3",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/users?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err)",
+									"        return",
+									"    }",
+									"    ",
+									"    var data = response.json()",
+									"    pm.environment.set(\"userID\", data.users[0].id)",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "1309d69e-7987-43d5-8060-ed5c179aba67",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"sdfsfs\",\n    \"name\": \"new name\",\n    \"contacts\": [\n    \t\"02394025564\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:3000/api/users/{{userID}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users",
+								"{{userID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localhost:3000/api/users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:3000/api/users?role=admin",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "admin"
+								}
+							]
+						},
+						"description": "get all"
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "183776c0-866a-4882-bc9f-b6acf2d66dbd",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: \"http://localhost:3000/api/auth/login\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({nic: pm.environment.get(\"nic\"), password: pm.environment.get(\"password\")})",
+							"        ",
+							"    }",
+							"}, function (err, response) {",
+							"    if (!err) {",
+							"        pm.environment.set(\"accesstoken\", response.json().token.tokenType+ ' ' + response.json().token.accessToken)",
+							"    }",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "02a9f33d-d9c7-4169-a923-900887c617f6",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Wards",
+			"description": "Wards",
+			"item": [
+				{
+					"name": "Beds",
+					"description": null,
+					"item": [
+						{
+							"name": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "3d2cd8ee-2687-4102-a996-840355d94528",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"http://localhost:3000/api/wards?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    console.log(data)",
+											"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+											"    pm.environment.set(\"bedID\", data.wards[0].beds[0]._id)",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"wards",
+										"{{wardID}}",
+										"beds",
+										"{{bedID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6922e850-a22a-4769-8efa-0e0ed3ac12e8",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"http://localhost:3000/api/wards?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+											"    pm.environment.set(\"bedID\", data.wards[0].beds[0]._id)",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"wards",
+										"{{wardID}}",
+										"beds",
+										"{{bedID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6415867b-a9b0-4334-be34-6473bc4a91e0",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"http://localhost:3000/api/wards?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    console.log(data)",
+											"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+											"    pm.environment.set(\"bedID\", data.wards[0].beds[0]._id)",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"number\": \"74\"\n}"
+								},
+								"url": {
+									"raw": "{{api}}/wards/{{wardID}}/beds/{{bedID}}",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"wards",
+										"{{wardID}}",
+										"beds",
+										"{{bedID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/wards/{{wardID}}/beds",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f6938989-6078-454f-a84c-2b3e91a79373",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + \"/wards?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+											"     pm.environment.unset(\"beds\")",
+											"    var bed = {",
+											"        number: _.random(1, 1000)",
+											"    }",
+											"    ",
+											"    pm.environment.set(\"bed\", JSON.stringify(bed))",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{{bed}}"
+								},
+								"url": {
+									"raw": "{{api}}/wards/{{wardID}}/beds",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"wards",
+										"{{wardID}}",
+										"beds"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/wards/{{wardID}}/beds/bulk",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "97bdd973-0773-4f3a-86f4-143c6ac7be9d",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + \"/wards?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"start\": \"10\",\n\t\"end\": \"50\"\n}"
+								},
+								"url": {
+									"raw": "{{api}}/wards/{{wardID}}/beds/bulk",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"wards",
+										"{{wardID}}",
+										"beds",
+										"bulk"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "{{api}}/wards",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e61ebcea-c844-4b86-ad9a-98e6d22f1dd9",
+								"type": "text/javascript",
+								"exec": [
+									"pm.variables.unset(\"number\");",
+									"pm.variables.set(\"number\", _.random(1,1000));",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"number\": {{number}},\n\t\"name\": \"Ward{{number}}\",\n\t\"beds\": [\n\t\t{\"number\": \"3\"},\n\t\t{\"number\": \"2\"},\n\t\t{\"number\": \"1\"},\n\t\t{\"number\": \"4\"}\n\t] \n}"
+						},
+						"url": {
+							"raw": "{{api}}/wards",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"wards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/wards/{{wardID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "07226787-d39a-4d26-9486-fd29b947ecbf",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/wards?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"        return;",
+									"    }",
+									"    ",
+									"    var data = response.json();",
+									"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+									"});",
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "cdbf2794-c001-4cf9-88ea-702de5ceb461",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Status code name has string\", function () {",
+									"    pm.response.to.have.status(\"OK\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/wards/{{wardID}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"wards",
+								"{{wardID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/wards?perPage=10",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "localhost:3000/api/wards?perPage=-1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"wards"
+							],
+							"query": [
+								{
+									"key": "perPage",
+									"value": "-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/wards/{{wardID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d91349cd-c039-4c71-93d2-eca7109bb622",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.environment.get(\"api\") + \"/wards?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"        return;",
+									"    }",
+									"    ",
+									"    var data = response.json();",
+									"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"somename\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/wards/{{wardID}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"wards",
+								"{{wardID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/wards/{{wardID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "df5f4b99-9b08-4e1c-865e-333e117a2572",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/wards?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"        return;",
+									"    }",
+									"    ",
+									"    var data = response.json();",
+									"    pm.environment.set(\"wardID\", data.wards[0]._id)",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/wards/{{wardID}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"wards",
+								"{{wardID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f759fab4-8258-4433-9d44-54b5796faf55",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: \"http://localhost:3000/api/auth/login\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({nic: pm.environment.get(\"nic\"), password: pm.environment.get(\"password\")})",
+							"        ",
+							"    }",
+							"}, function (err, response) {",
+							"    if (!err) {",
+							"        pm.environment.set(\"accesstoken\", response.json().token.tokenType+ ' ' + response.json().token.accessToken);",
+							"    }",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "66e3ed09-1a05-43ad-90f7-229733ca2daa",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Devices",
+			"description": null,
+			"item": [
+				{
+					"name": "Controlling devices",
+					"description": null,
+					"item": [
+						{
+							"name": "{{api}}/devices/{{deviceID}}/blacklist",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "50c443df-dc2a-4ba7-9239-2ca567d9512a",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"http://localhost:3000/api/devices?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    pm.environment.set(\"deviceID\", data.devices[0]._id)",
+											"});"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "20ff5ad6-60cb-4cc6-b75c-6e9177fc7cab",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Has been blacklisted\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.blacklisted).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Has been unauthorized\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.authorized).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Has been un assigned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.assigned).to.eql(false);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/blacklist",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"blacklist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/whitelist",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8d18abd3-24c8-474d-a25a-dc4f5d29ef54",
+										"type": "text/javascript",
+										"exec": [
+											"pm.sendRequest({",
+											"    url:\"http://localhost:3000/api/devices?page=1&perPage=10\",",
+											"    header: {",
+											"        'Authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    method: 'GET'",
+											"}, function (err, response) {",
+											"    if (err) {",
+											"        console.log(err);",
+											"        return;",
+											"    }",
+											"    ",
+											"    var data = response.json();",
+											"    pm.environment.set(\"deviceID\", data.devices[0]._id)",
+											"});"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "56de9d32-e8a4-4d9e-bd30-0e38e75aaf87",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Has been whitelisted\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.blacklisted).to.eql(false);",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/whitelist",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"whitelist"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/authorize",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "de026fac-b79f-438c-8588-aed9d8e36c4c",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											"",
+											"",
+											"",
+											"",
+											"",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "7c42012c-ec21-443a-adcf-644d1882cd34",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"",
+											"pm.test(\"Device to be authorized\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.authorized).to.eql(true);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/authorize",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"authorize"
+									]
+								},
+								"description": "Authorize a non blacklisted device"
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/authorize - Blacklisted",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "049d8fad-53db-4a8b-9a8e-588e5a038506",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"        blacklist(response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											"",
+											"function blacklist(deviceID) {",
+											"    pm.sendRequest({",
+											"        url: pm.environment.get(\"api\") + '/devices/' + deviceID + '/blacklist',",
+											"        method: 'POST',",
+											"        header: {",
+											"            'content-type': 'application/json',",
+											"            'authorization': pm.environment.get(\"accesstoken\")",
+											"        },",
+											"        body: {",
+											"            mode: 'raw',",
+											"            raw: JSON.stringify({})",
+											"        }",
+											"    }, function (err, response) {",
+											"        console.log(response.json());",
+											"    });",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "c7a82a91-a897-40c1-ac07-7247c8796399",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Device cannot be authorize due to its blacklisted\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql('Blacklisted device');",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/authorize",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"authorize"
+									]
+								},
+								"description": "Try authorizing blacklisted device"
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/unauthorize",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "a988663b-d2c8-42aa-b7b8-d968e9b7bfb5",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "515f179f-1267-4612-ac9c-31d8ce2c40f1",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Device to be unauthorized\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.authorized).to.eql(false);",
+											"});",
+											"",
+											"pm.test(\"Device to be unassigned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.assigned).to.eql(false);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/unauthorize",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"unauthorize"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/assign - Unauthorized",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "b7f1e09c-c507-42dc-a08e-e09118dd0132",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "25eff502-6325-49af-a381-ebb8e499b63e",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Device is unauthorized\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql('Unauthorized device');",
+											"});",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/assign",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"assign"
+									]
+								},
+								"description": "Try assigning unauthorized device"
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/assign - Blacklisted device",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1b15d4b2-cb9e-4de7-ab59-38be65220807",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"        blacklist(response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											"",
+											"function blacklist(deviceID) {",
+											"    pm.sendRequest({",
+											"        url: pm.environment.get(\"api\") + '/devices/' + deviceID + '/blacklist',",
+											"        method: 'POST',",
+											"        header: {",
+											"            'content-type': 'application/json',",
+											"            'authorization': pm.environment.get(\"accesstoken\")",
+											"        },",
+											"        body: {",
+											"            mode: 'raw',",
+											"            raw: JSON.stringify({})",
+											"        }",
+											"    }, function (err, response) {",
+											"        console.log(response.json());",
+											"    });",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f67113c9-efac-4f58-818e-47d3b3a5b413",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Device cannot be authorize due to its blacklisted\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql('Blacklisted device');",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/assign",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"assign"
+									]
+								},
+								"description": "Try assigning a blacklisted device"
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/assign",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "06f0e475-66b4-49f8-97ad-a36cae0a8684",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"        authorize(response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											"",
+											"function authorize(deviceID) {",
+											"    pm.sendRequest({",
+											"        url: pm.environment.get(\"api\") + '/devices/' + deviceID + '/authorize',",
+											"        method: 'POST',",
+											"        header: {",
+											"            'content-type': 'application/json',",
+											"            'authorization': pm.environment.get(\"accesstoken\")",
+											"        },",
+											"        body: {",
+											"            mode: 'raw',",
+											"            raw: JSON.stringify({})",
+											"        }",
+											"    }, function (err, response) {",
+											"        console.log(response.json());",
+											"    });",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "f263fb3e-f411-4170-afd9-b80360d27990",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Device authorized\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.authorized).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"Device assigned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.assigned).to.eql(true);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/assign",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"assign"
+									]
+								},
+								"description": "Try assigning authorizde device"
+							},
+							"response": []
+						},
+						{
+							"name": "{{api}}/devices/{{deviceID}}/unassign",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "14da0e58-e31e-4b05-8a19-e8aedd578073",
+										"type": "text/javascript",
+										"exec": [
+											"pm.variables.set(\"mac\", 'mac' + Date.now())",
+											"",
+											"pm.sendRequest({",
+											"    url: pm.environment.get(\"api\") + '/devices/auth/self',",
+											"    method: 'POST',",
+											"    header: {",
+											"        'content-type': 'application/json',",
+											"        'authorization': pm.environment.get(\"accesstoken\")",
+											"    },",
+											"    body: {",
+											"        mode: 'raw',",
+											"        raw: JSON.stringify({",
+											"            mac: pm.variables.get(\"mac\"), ",
+											"            name: pm.variables.get(\"mac\")",
+											"        })",
+											"        ",
+											"    }",
+											"}, function (err, response) {",
+											"    if (!err) {",
+											"        console.log(response.json())",
+											"        pm.environment.set(\"deviceID\", response.json().deviceID)",
+											"        authorize(response.json().deviceID)",
+											"    } else {",
+											"        console.log(err)",
+											"    }",
+											"});",
+											"",
+											"function authorize(deviceID) {",
+											"    pm.sendRequest({",
+											"        url: pm.environment.get(\"api\") + '/devices/' + deviceID + '/authorize',",
+											"        method: 'POST',",
+											"        header: {",
+											"            'content-type': 'application/json',",
+											"            'authorization': pm.environment.get(\"accesstoken\")",
+											"        },",
+											"        body: {",
+											"            mode: 'raw',",
+											"            raw: JSON.stringify({})",
+											"        }",
+											"    }, function (err, response) {",
+											"        console.log(response.json());",
+											"    });",
+											"}",
+											"",
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "daa05a64-c2e4-4e42-b3f4-1f01b5a1f23a",
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Device un assigned\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.device.assigned).to.eql(false);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{accesstoken}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{api}}/devices/{{deviceID}}/unassign",
+									"host": [
+										"{{api}}"
+									],
+									"path": [
+										"devices",
+										"{{deviceID}}",
+										"unassign"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "{{api}}/devices/auth/self",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"mac\": \"mac1522303925781\",\n\t\"chipId\": \"fgsjgkdfk121isd0fp0df\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/devices/auth/self",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"devices",
+								"auth",
+								"self"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/devices",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/devices?type=blacklisted&order=asc",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"devices"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "blacklisted"
+								},
+								{
+									"key": "order",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/devices/{{deviceID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "19e28b7c-e317-4fb2-b425-036041ba8681",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/devices?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"        return;",
+									"    }",
+									"    ",
+									"    var data = response.json();",
+									"    pm.environment.set(\"deviceID\", data.devices[0]._id)",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{api}}/devices/{{deviceID}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"devices",
+								"{{deviceID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "{{api}}/devices/{{deviceID}}",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "19e28b7c-e317-4fb2-b425-036041ba8681",
+								"type": "text/javascript",
+								"exec": [
+									"pm.sendRequest({",
+									"    url:\"http://localhost:3000/api/devices?page=1&perPage=10\",",
+									"    header: {",
+									"        'Authorization': pm.environment.get(\"accesstoken\")",
+									"    },",
+									"    method: 'GET'",
+									"}, function (err, response) {",
+									"    if (err) {",
+									"        console.log(err);",
+									"        return;",
+									"    }",
+									"    ",
+									"    var data = response.json();",
+									"    pm.environment.set(\"deviceID\", data.devices[0]._id)",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accesstoken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"djvfsfdgdsffsfskfs\"\n}"
+						},
+						"url": {
+							"raw": "{{api}}/devices/{{deviceID}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"devices",
+								"{{deviceID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cb19586b-500a-4052-8af8-9e389058f864",
+						"type": "text/javascript",
+						"exec": [
+							"pm.sendRequest({",
+							"    url: \"http://localhost:3000/api/auth/login\",",
+							"    method: 'POST',",
+							"    header: {",
+							"        'content-type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({nic: pm.environment.get(\"nic\"), password: pm.environment.get(\"password\")})",
+							"    }",
+							"}, function (err, response) {",
+							"    if (!err) {",
+							"        pm.environment.set(\"accesstoken\", response.json().token.tokenType+ ' ' + response.json().token.accessToken);",
+							"    }",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "9d318b2a-6765-4983-ae95-44730aae865b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "localhost:3000/api/status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3cc3970b-b30c-4d16-8eb9-c626287ee77a",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "dd7dd664-d1fe-4c4e-ac0a-0e6a7c4b3a69",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nic\" : \"951530387v\",\n\t\"password\": \"somethinfibelive\",\n\t\"name\" : \"kasun\",\n\t\"role\": \"admin\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/status",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
